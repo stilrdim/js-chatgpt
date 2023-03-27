@@ -1,4 +1,3 @@
-// import { Configuration, OpenAIApi } from "openai";
 const { Configuration, OpenAIApi } = require('openai')
 require('dotenv').config()
 
@@ -9,10 +8,12 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-async function createImage() {
+// Generate an image by using prompt, should take about 10seconds to return a url
+// Can generate multiple images at once
+async function createImage(prompt, num = 1) {
   const response = await openai.createImage({
-    prompt: "A cute baby sea otter",
-    n: 1,
+    prompt: prompt,
+    n: num,
     size: "1024x1024",
   }).then(res => {
     return res.data.data[0].url;
@@ -21,6 +22,7 @@ async function createImage() {
   console.log(response);
 }
 
+// List all available AI models and basic info about them
 async function listModels() {
   const response = await openai.listModels()
     .then(res => {
@@ -31,6 +33,6 @@ async function listModels() {
     .catch(() => {
       return "failed"
     })
+
   console.log(response);
 }
-listModels()
